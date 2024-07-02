@@ -40,9 +40,11 @@ class Room(CommonModel):
     owner = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
+        related_name="rooms",
     )
     amenities = models.ManyToManyField(
         "rooms.Amenity",
+        related_name="rooms",
     )
     category = models.ForeignKey(
         "categories.Category",
@@ -50,6 +52,7 @@ class Room(CommonModel):
         blank=True,
         on_delete=models.SET_NULL,
         # SET_NULL 사용 시 blank와 null을 True로 설정해야된다.
+        related_name="rooms",
     )
 
     def __str__(self):
