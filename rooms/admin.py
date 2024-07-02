@@ -10,6 +10,7 @@ class RoomAdmin(admin.ModelAdmin):
         "price",
         "kind",
         "total_amenities",
+        "rating",
         "owner",
         "created_at",
     )
@@ -25,9 +26,14 @@ class RoomAdmin(admin.ModelAdmin):
         "created_at",
         "updated_at",
     )
-
-    def total_amenities(self, room):
-        return room.amenities.count()
+    search_fields = (
+        "^name",
+        # 앞에 ^를 붙히면 startwith 조건으로 검색한다.
+        "=price",
+        # 앞에 =를 붙히면 extract match 조건으로 검색한다.
+        "owner__username",
+        # 위 같은 형식으로 연결된 외래키의 속성으로 검색도 가능하다.
+    )
 
 
 @admin.register(Amenity)
