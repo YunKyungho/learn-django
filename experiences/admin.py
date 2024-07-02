@@ -17,6 +17,7 @@ class ExperienceAdmin(admin.ModelAdmin):
         "category",
     )
 
+
 @admin.register(Perk)
 class PerkAdmin(admin.ModelAdmin):
 
