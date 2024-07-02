@@ -18,7 +18,7 @@ class Experience(CommonModel):
         max_length=250,
     )
     host = models.ForeignKey(
-        "user.User",
+        "users.User",
         on_delete=models.CASCADE,
     )
     price = models.PositiveIntegerField()
@@ -31,6 +31,13 @@ class Experience(CommonModel):
     description = models.TextField()
     perks = models.ManyToManyField(
         "experiences.Perk",
+    )
+    category = models.ForeignKey(
+        "categories.Category",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        # SET_NULL 사용 시 blank와 null을 True로 설정해야된다.
     )
 
     def __str__(self):

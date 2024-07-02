@@ -38,11 +38,18 @@ class Room(CommonModel):
         choices=RoomKindChoices.choices,
     )
     owner = models.ForeignKey(
-        "user.User",
+        "users.User",
         on_delete=models.CASCADE,
     )
     amenities = models.ManyToManyField(
         "rooms.Amenity",
+    )
+    category = models.ForeignKey(
+        "categories.Category",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        # SET_NULL 사용 시 blank와 null을 True로 설정해야된다.
     )
 
     def __str__(self):
