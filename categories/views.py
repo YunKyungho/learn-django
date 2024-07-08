@@ -14,7 +14,7 @@ class Categories(APIView):
             all_category,
             many=True,
         )
-        return Response(serializer)
+        return Response(serializer.data)
 
     def post(self, request):
         serializer = CategorySerializer(data=request.data)
@@ -44,8 +44,8 @@ class CategoryDetail(APIView):
             partial=True
         )
         if serializer.is_valid():
-            update_category = serializer.save()
-            return Response(CategorySerializer(update_category).data)
+            updated_category = serializer.save()
+            return Response(CategorySerializer(updated_category).data)
         else:
             return Response(serializer.errors)
 
