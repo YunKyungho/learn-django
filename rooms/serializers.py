@@ -18,6 +18,7 @@ class RoomListSerializer(ModelSerializer):
 
     rating = SerializerMethodField()
     # SerializerMethodField가 model에 정의 해놓은 method를 사용하게 해준다
+    is_owner = SerializerMethodField()
 
     class Meta:
         model = Room
@@ -28,11 +29,19 @@ class RoomListSerializer(ModelSerializer):
             "city",
             "price",
             "rating",
+            "is_owner",
         )
 
     def get_rating(self, room):
-        # get_{변수명}과 같이 함수명을 만들어야지만 rating field와 매칭 된다. 
+        # get_{변수명}과 같이 함수명을 만들어야지만 rating field와 매칭 된다.
         return room.rating()
+
+    def get_is_owner(self, room):
+        # context를 통해 request data를 serializer 객체에게 보내주고
+        # 이를 통해 요청 user와 조회하려는 room의 owner가 일치하는지 확인하여
+        # is_owner 열을 만들어준다.
+        request = self.context['request']
+        return room.owner == request.user
 
 class RoomDetailSerializer(ModelSerializer):
 
@@ -43,6 +52,7 @@ class RoomDetailSerializer(ModelSerializer):
     amenities = AmenitySerializer(read_only=True, many=True,)
     category = CategorySerializer(read_only=True,)
     rating = SerializerMethodField()
+    is_owner = SerializerMethodField()
 
     class Meta:
         model = Room
@@ -52,3 +62,7 @@ class RoomDetailSerializer(ModelSerializer):
 
     def get_rating(self, room):
         return room.rating()
+
+    def get_is_owner(self, room):
+        request = self.context['request']
+        return room.owner == request.user
