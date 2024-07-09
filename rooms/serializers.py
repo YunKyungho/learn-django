@@ -2,6 +2,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import Room, Amenity
 from users.serializers import TinyUserSerializer
 from categories.serializers import CategorySerializer
+from reviews.serializers import ReviewSerializer
 
 
 class AmenitySerializer(ModelSerializer):
@@ -43,6 +44,7 @@ class RoomListSerializer(ModelSerializer):
         request = self.context['request']
         return room.owner == request.user
 
+
 class RoomDetailSerializer(ModelSerializer):
 
     owner = TinyUserSerializer(read_only=True)
@@ -53,6 +55,9 @@ class RoomDetailSerializer(ModelSerializer):
     category = CategorySerializer(read_only=True,)
     rating = SerializerMethodField()
     is_owner = SerializerMethodField()
+    # reviews = ReviewSerializer(many=True, read_only=True)
+    # 위 같은 방식의 역접근은 몇 만개의 리뷰를 단번에 가져오게 되는 부하가 발생한다.
+    # 따라서 pagination이 필요하다.
 
     class Meta:
         model = Room
@@ -66,3 +71,5 @@ class RoomDetailSerializer(ModelSerializer):
     def get_is_owner(self, room):
         request = self.context['request']
         return room.owner == request.user
+
+
