@@ -29,10 +29,12 @@ class RoomListSerializer(ModelSerializer):
 
 class RoomDetailSerializer(ModelSerializer):
 
-    owner = TinyUserSerializer()
+    owner = TinyUserSerializer(read_only=True)
     # 관계가 있는 모델을 연결 시켜서 데이터를 주고 싶을 때
-    amenities = AmenitySerializer(many=True)
-    category = CategorySerializer()
+    # 방의 주인을 이용자가 직접 설정할 수 있게 해서는 안 되기에 read_only 설정을 준다.
+    # owner는 view 호출 시 request 인자를 통해 확인한다.
+    amenities = AmenitySerializer(read_only=True, many=True,)
+    category = CategorySerializer(read_only=True,)
 
     class Meta:
         model = Room
